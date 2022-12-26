@@ -1,14 +1,14 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, View, TextInput, Button } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import React, {useState} from 'react';
+import {StyleSheet, Text, View, TextInput, Button} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
 
-import "react-native-gesture-handler";
+import 'react-native-gesture-handler';
 
-import styles from "./styles";
-import HomeScreen from "./pages/home";
-import LoginScreen from "./pages/home";
-import SignupScreen from "./pages/home";
+import styles from './styles';
+import HomeScreen from './pages/home';
+import LoginScreen from './pages/home';
+import SignupScreen from './pages/home';
 
 const Stack = createStackNavigator();
 
