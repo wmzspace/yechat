@@ -1,29 +1,54 @@
-import React, {useState} from 'react';
-import {StyleSheet, Text, View, TextInput, Button} from 'react-native';
+import * as React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import 'react-native-gesture-handler';
 
-import styles from './styles';
 import HomeScreen from './pages/home';
-import LoginScreen from './pages/home';
-import SignupScreen from './pages/home';
+import SignupScreen from './pages/signup';
+import LoginScreen from './pages/login';
 
 const Stack = createStackNavigator();
 
-const App = () => {
+export default function App() {
   return (
-    <View style={styles.container}>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
-          <Stack.Screen name="欢迎加入易聊" component={HomeScreen} />
-          <Stack.Screen name="注册" component={SignupScreen} />
-          <Stack.Screen name="登录" component={LoginScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{
+            // title:<>易聊 <Icon name="message1" size={25} color="skyblue"/></>,
+            // headerStyle: {
+            //   backgroundColor: 'black',
+            // },
+            // headerTintColor: '#ffffff',
+            // headerTitleStyle: {
+            //   fontSize: 25,
+            //   lineHeight: 30,
+            //   borderColor: 'black',
+            //   padding: 10,
+            // },
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="Signup"
+          component={SignupScreen}
+          options={{
+            title: '注册账号',
+            headerTitleAlign: 'center',
+          }}
+        />
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{
+            title: '登陆账号',
+            headerTitleAlign: 'center',
+          }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
-};
-
-export default App;
+}

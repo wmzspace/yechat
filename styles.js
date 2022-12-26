@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import styled from 'styled-components';
 
 const styles = StyleSheet.create({
   container: {
@@ -13,20 +14,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   innerContainer: {
-    padding: 24,
+    display: 'flex',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  title: {
-    marginTop: 16,
-    paddingVertical: 8,
-    borderWidth: 4,
-    borderColor: '#20232a',
-    borderRadius: 6,
-    backgroundColor: '#61dafb',
-    color: '#20232a',
-    textAlign: 'center',
-    fontSize: 30,
-    fontWeight: 'bold',
-  },
+  inlineFlex: {
+    flexWrap: 'wrap',
+    alignItems: 'flex-start',
+    flexDirection: 'row',
+    justifyContent: 'space-around'
+  }
 });
 
 export default styles;

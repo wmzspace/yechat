@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
+import * as React from 'react';
 import {StyleSheet, Text, View, TextInput, Button} from 'react-native';
 import styles from '../styles';
 
-function LoginScreen() {
+export default function LoginScreen() {
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
       <Text>Details Screen</Text>
@@ -10,4 +10,3 @@ function LoginScreen() {
   );
 }
 
-export default LoginScreen;
