@@ -23,7 +23,6 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     alignItems: 'flex-start',
     flexDirection: 'row',
-    justifyContent: 'space-around'
   }
 });
 
