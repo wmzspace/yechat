@@ -1,8 +1,7 @@
 import * as React from 'react';
-import {StyleSheet, Text, View, Button, ImageBackground} from 'react-native';
+import {StyleSheet, Text, View, ImageBackground} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import styles from '../styles';
-import styled from 'styled-components';
 
 const style = StyleSheet.create({
   button: {
@@ -17,14 +16,6 @@ const style = StyleSheet.create({
     fontSize: 16,
   },
 });
-
-const HomeText = styled.Text`
-  font-size: 50px;
-  color: blue;
-  font-weight: 500;
-`;
-
-const BlankLine = styled.View``;
 
 export default function HomeScreen({navigation}) {
   return (
