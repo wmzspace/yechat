@@ -4,7 +4,8 @@ import {
   Text,
   View,
   TextInput,
-  TouchableHighlight,useColorScheme
+  TouchableHighlight,
+  useColorScheme,
 } from 'react-native';
 import {StatusBarComp} from '../@components/StatusBarComp';
 import styles from '../styles';
@@ -43,9 +44,13 @@ export default function LoginScreen({navigation}) {
   const [passwordIsValid, setPasswordValidation] = React.useState(false);
 
   return (
-    <View style={[styles.container,useColorScheme() === 'dark'
-    ? styles.darkBackgroundColor
-    : styles.lightBackgroundColor]}>
+    <View
+      style={[
+        styles.container,
+        useColorScheme() === 'dark'
+          ? styles.darkBackgroundColor
+          : styles.lightBackgroundColor,
+      ]}>
       <StatusBarComp />
       <View style={{alignItems: 'center'}}>
         {/* <View style={{alignItems: 'center'}}> */}
@@ -58,7 +63,7 @@ export default function LoginScreen({navigation}) {
               name="account"
               size={30}
               style={style.icon}
-            /> 
+            />
             <TextInput
               style={style.textInput}
               placeholder="用户名"
@@ -74,11 +79,7 @@ export default function LoginScreen({navigation}) {
           </View>
 
           <View style={style.inputWrap}>
-            <MaterialCommunityIcons
-              name="lock"
-              size={30}
-              style={style.icon}
-            />
+            <MaterialCommunityIcons name="lock" size={30} style={style.icon} />
             <TextInput
               style={style.textInput}
               placeholder="密码"

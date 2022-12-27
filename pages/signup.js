@@ -44,9 +44,14 @@ export default function SignupScreen({navigation}) {
   const [passwordIsValid, setPasswordValidation] = React.useState(false);
 
   return (
-    <View style={[styles.container,styles.container,useColorScheme() === 'dark'
-    ? styles.darkBackgroundColor
-    : styles.lightBackgroundColor]}>
+    <View
+      style={[
+        styles.container,
+        styles.container,
+        useColorScheme() === 'dark'
+          ? styles.darkBackgroundColor
+          : styles.lightBackgroundColor,
+      ]}>
       <StatusBarComp />
       <View style={{alignItems: 'center'}}>
         {/* <View style={{alignItems: 'center'}}> */}
