@@ -1,4 +1,14 @@
 {
   "name": "yechat",
-  "displayName": "yechat"
+  "displayName": "yechat",
+
+  "expo": {
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "userInterfaceStyle": "automatic"
+    },
+    "android": {
+      "userInterfaceStyle": "automatic"
+    }
+  }
 }

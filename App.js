@@ -1,7 +1,8 @@
 import * as React from 'react';
+import {useColorScheme} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import 'react-native-gesture-handler';
+import styles from './styles';
 
 import HomeScreen from './pages/home';
 import SignupScreen from './pages/signup';
@@ -38,14 +39,28 @@ export default function App() {
           options={{
             title: '注册账号',
             headerTitleAlign: 'center',
+            headerStyle: [
+              useColorScheme() === 'dark'
+                ? styles.darkBackgroundColor
+                : styles.lightBackgroundColor,
+            ],
+            headerTintColor: useColorScheme() === 'dark' ? '#ffffff' : 'black',
           }}
         />
         <Stack.Screen
           name="Login"
           component={LoginScreen}
           options={{
-            title: '登陆账号',
+            title: '登录账号',
             headerTitleAlign: 'center',
+            headerStyle: [
+              useColorScheme() === 'dark'
+                ? styles.darkBackgroundColor
+                : styles.lightBackgroundColor,
+              {borderWidth: 0},
+            ],
+            headerTitleStyle: {borderColor: 'white', borderWidth: 0},
+            headerTintColor: useColorScheme() === 'dark' ? '#ffffff' : 'black',
           }}
         />
       </Stack.Navigator>

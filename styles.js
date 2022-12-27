@@ -46,6 +46,26 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: 'lightgray',
   },
+  lightBackgroundColor: {
+    backgroundColor: '#fcfcfc',
+  },
+  darkBackgroundColor: {
+    backgroundColor: '#181818',
+  },
+  lightColor: {
+    color: '#fcfcfc',
+  },
+  darkColor: {
+    color: 'black',
+  },
+  lightTheme: {
+    backgroundColor: '#fcfcfc',
+    color: 'black',
+  },
+  darkTheme: {
+    backgroundColor: '#181818',
+    color: '#fcfcfc',
+  },
 });
 
 export default styles;

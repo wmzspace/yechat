@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Text, View, ImageBackground} from 'react-native';
+import {Text, View, ImageBackground, useColorScheme} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {StatusBarComp} from '../@components/StatusBarComp';
 import * as Animatable from 'react-native-animatable';
@@ -42,18 +42,18 @@ export default function HomeScreen({navigation}) {
                 backgroundColor: '#06be5e',
               },
             ]}>
-            <Text style={{color: '#f5fcfa', fontSize: 16}}>登录</Text>
+            <Text style={{color: '#fcfcfc', fontSize: 16}}>登录</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={() => navigation.navigate('Signup')}
             style={[
               styles.button2,
-              {
-                backgroundColor: '#fcfcfc',
-              },
+              useColorScheme() === 'dark'
+                ? styles.darkBackgroundColor
+                : styles.lightBackgroundColor,
             ]}>
-            <Text style={{color: 'black', fontSize: 16}}>注册</Text>
+            <Text style={{fontSize: 16}}>注册</Text>
           </TouchableOpacity>
         </Animatable.View>
       </Animatable.View>
