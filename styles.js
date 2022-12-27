@@ -1,16 +1,15 @@
-import {StyleSheet} from 'react-native';
+import {Dimensions, StyleSheet, NativeModules} from 'react-native';
+let deviceHeight =
+  Dimensions.get('window').height / Dimensions.get('window').width > 1.8
+    ? Dimensions.get('window').height+ NativeModules.StatusBarManager.HEIGHT
+    : Dimensions.get('window').height ;
+console.log(deviceHeight);
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    padding: 24,
-    borderColor: '#20232a',
-    borderRadius: 6,
-    backgroundColor: '#61dafb',
-    color: '#20232a',
-    textAlign: 'center',
-    fontSize: 30,
-    fontWeight: 'bold',
+    width: Dimensions.get('screen').width,
+    height: deviceHeight,
+    justifyContent: 'center',
   },
   innerContainer: {
     display: 'flex',

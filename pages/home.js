@@ -1,7 +1,10 @@
 import * as React from 'react';
-import {StyleSheet, Text, View, ImageBackground} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import styles from '../styles';
+import {StyleSheet, Text, View, ImageBackground, SafeAreaView,Dimensions,StatusBar} from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { StatusBarComp } from '../@components/StatusBarComp';
+import styles from '../styles'; 
+import Animated, { useSharedValue, useAnimatedStyle } from 'react-native-reanimated';
+import * as Animatable from 'react-native-animatable';
 
 const style = StyleSheet.create({
   button: {
@@ -21,10 +24,12 @@ export default function HomeScreen({navigation}) {
   return (
     <ImageBackground
       source={require('../images/home.jpg')}
-      style={{
-        flex: 1,
+      style={[{
+        // flex: 1,
         resizeMode: 'cover',
-      }}>
+      }, styles.container]}>
+      <StatusBarComp />
+      {/* <Text style={{color: 'black'}}>11111111</Text> */}
       <Text
         style={{
           color: '#fcfcfc',
