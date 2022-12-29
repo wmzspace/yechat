@@ -52,7 +52,7 @@ export default function App() {
             headerTintColor: useColorScheme() === 'dark' ? '#ffffff' : 'black',
           }}
         />
-        <Stack.Screen name='Test' component={TestScreen}/>
+        <Stack.Screen name="Test" component={TestScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

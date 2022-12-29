@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableHighlight,
   useColorScheme,
+  Alert,
 } from 'react-native';
 import {StatusBarComp} from '../@components/StatusBarComp';
 import styles from '../styles';
@@ -42,6 +43,92 @@ export default function SignupScreen({navigation}) {
   const [password, setPassword] = React.useState('');
   const [userNameIsValid, setUserNameValidation] = React.useState(false);
   const [passwordIsValid, setPasswordValidation] = React.useState(false);
+  
+
+  const sendAjax = () => {
+    
+    let formData = new FormData();
+    formData.append('userName', userName);
+    formData.append('password', password);
+    
+    fetch('http://192.168.3.23:8085/signup', {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        // 'Content-Type': 'multipart/form-data;charset=utf-8',
+      },
+      body: "key=1",
+      // body: formData,
+    })
+    // .then((response) => response.json())
+    // .then((responseData)=> {
+    //     console.log('uploadImage', responseData);
+    //   resolve(responseData);
+    // })
+    // .catch((err)=> {
+    //     console.log('err', err);
+    //     reject(err);
+    // });
+      .then(function (res) {
+        console.log('fetch request ', JSON.stringify(res.ok));
+        if (res.ok) {
+          res.json().then(function (json) {
+            console.info(json);
+            Alert.alert(
+              '已完成注册',
+              '用户名: ' + json.username + '\n密码: ' + json.password,
+              // JSON.stringify(json),
+              [{text: '确定', onPress: () => console.log('OK Pressed!')}],
+            );
+          });
+        } else {
+          Alert.alert('提示', '请求失败', [
+            {text: '确定', onPress: () => console.log('OK Pressed!')},
+          ]);
+        }
+      })
+      .catch(function (e) {
+        console.log('fetch fail');
+        Alert.alert('提示', '系统错误', [
+          {text: '确定', onPress: () => console.log('OK Pressed!')},
+        ]);
+      });
+  };
+
+  // const sendAjax = () => {
+  //   fetch('http://192.168.3.23:8085', {
+  //     method: 'POST',
+  //     mode: 'cors',
+  //     headers: {
+  //       'Content-Type': 'application/x-www-form-urlencoded',
+  //     },
+  //     body: 'key=1',
+  //   })
+  //     .then(function (res) {
+  //       console.log('fetch request ', JSON.stringify(res.ok));
+  //       if (res.ok) {
+  //         res.json().then(function (json) {
+  //           console.info(json);
+  //           Alert.alert(
+  //             '提示',
+  //             '来自后台数据：名字' + json.name + '、年龄' + json.age,
+  //             [{text: '确定', onPress: () => console.log('OK Pressed!')}],
+  //           );
+  //         });
+  //       } else {
+  //         Alert.alert('提示', '请求失败', [
+  //           {text: '确定', onPress: () => console.log('OK Pressed!')},
+  //         ]);
+  //       }
+  //     })
+  //     .catch(function (e) {
+  //       console.log('fetch fail');
+  //       Alert.alert('提示', '系统错误', [
+  //         {text: '确定', onPress: () => console.log('OK Pressed!')},
+  //       ]);
+  //     });
+  // };
 
   return (
     <View
@@ -121,7 +208,8 @@ export default function SignupScreen({navigation}) {
         </View>
 
         <TouchableHighlight
-          onPress={() => navigation.navigate('Home')}
+          // onPress={() => navigation.navigate('Home')}
+          onPress={sendAjax}
           disabled={!(userNameIsValid && passwordIsValid)}
           style={
             userNameIsValid && passwordIsValid
