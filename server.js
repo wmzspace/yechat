@@ -3,6 +3,9 @@
 var express = require('express');
 //Post方式请求参数放在请求体里面，需引用body-parser解析body
 var bodyParser = require('body-parser');
+// var multer = require('multer'); //用于接收文件
+// var upload = multer({dest: 'uploads/'});
+
 var app = express();
 // 引用
 app.use(bodyParser.urlencoded({extended: false}));
@@ -45,37 +48,14 @@ connection.connect(err => {
   );
 });
 
-var sql = 'SELECT * FROM users';
+// const userInfo = {
+//   username: 'test1',
+//   password: 'test1',
+//   gender: 'female',
+//   age: null,
+//   address: null,
+// };
 
-//查
-connection.query(sql, function (err, result) {
-  if (err) {
-    console.log('[SELECT ERROR] - ', err.message);
-    return;
-  }
-
-  console.log('--------------------------SELECT----------------------------');
-  console.log(result);
-  console.log('------------------------------------------------------------');
-});
-
-const userInfo = {
-  username: 'test1',
-  password: 'test1',
-  gender: 'female',
-  age: null,
-  address: null,
-};
-
-const addSql = `INSERT INTO users(id,username,password,gender,age,address,join_time,last_login_time) VALUES(?,?,?,?,?,?,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)`;
-const addSqlParams = [
-  0,
-  userInfo.username,
-  userInfo.password,
-  userInfo.gender,
-  userInfo.age,
-  userInfo.address,
-];
 //增
 
 // connection.query(addSql, addSqlParams, function (err, result) {
@@ -91,7 +71,7 @@ const addSqlParams = [
 //   );
 // });
 
-connection.end();
+// connection.end();
 
 var data = {name: 'Test', age: '19'};
 
@@ -109,12 +89,62 @@ app.get('/', function (req, res) {
 });
 
 app.post('/signup', function (req, res) {
-  console.log('post............');
+  console.log('posting............');
+  console.log(JSON.stringify(req.body));
   console.log(req.body);
-  console.log('json: ' + JSON.stringify(userInfo));
-  res.end(JSON.stringify(userInfo));
-})
 
+  var sql = 'SELECT * FROM users';
+
+  //查
+  connection.query(sql, function (err, result) {
+    if (err) {
+      console.log('[SELECT ERROR] - ', err.message);
+      return;
+    }
+
+    console.log('--------------------------SELECT----------------------------');
+    console.log(result, result.constructor.name);
+    console.log('------------------------------------------------------------');
+
+    for (let user of result) {
+      // console.log("Test:", _user.username);
+      // console.log(user.username)
+      if (user.username == req.body.username) {
+        console.log('重复!');
+        res.end('该用户名已被注册！');
+        // res.status(404).send('404')
+        return;
+      }
+    }
+
+    const addSql = `INSERT INTO users(id,username,password,gender,age,address,join_time,last_login_time) VALUES(?,?,?,?,?,?,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)`;
+    const addSqlParams = [
+      0,
+      req.body.username,
+      req.body.password,
+      req.body.gender,
+      req.body.age,
+      req.body.address,
+    ];
+
+    connection.query(addSql, addSqlParams, function (err, result) {
+      if (err) {
+        console.log('[INSERT ERROR] - ', err.message);
+        return;
+      }
+
+      console.log(
+        '--------------------------INSERT----------------------------',
+      );
+      console.log('INSERT ID:', result);
+      console.log(
+        '-----------------------------------------------------------------\n\n',
+      );
+    });
+    res.end("注册成功!\n"+JSON.stringify(req.body));
+  });
+
+});
 
 app.listen(8085, function () {
   // console.log("应用实例，访问地址为 http://43.143.213.226:8085");

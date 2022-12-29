@@ -6,11 +6,11 @@ import {
   TextInput,
   TouchableHighlight,
   useColorScheme,
+  ToastAndroid,
 } from 'react-native';
 import {StatusBarComp} from '../@components/StatusBarComp';
 import styles from '../styles';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
 const style = StyleSheet.create({
   inputWrap: {
     flexDirection: 'row',

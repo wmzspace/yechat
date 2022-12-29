@@ -7,7 +7,6 @@ import styles from './styles';
 import HomeScreen from './pages/home';
 import SignupScreen from './pages/signup';
 import LoginScreen from './pages/login';
-import TestScreen from './pages/test';
 
 const Stack = createStackNavigator();
 
@@ -52,7 +51,7 @@ export default function App() {
             headerTintColor: useColorScheme() === 'dark' ? '#ffffff' : 'black',
           }}
         />
-        <Stack.Screen name="Test" component={TestScreen} />
+        {/* <Stack.Screen name="Test" component={LocateScreen} /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );

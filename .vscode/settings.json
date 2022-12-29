@@ -27,5 +27,6 @@
             "username": "service",
             "password": "service"
         }
-    ]
+    ],
+    "java.configuration.updateBuildConfiguration": "interactive"
 }
