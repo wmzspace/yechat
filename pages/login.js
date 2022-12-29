@@ -6,7 +6,7 @@ import {
   TextInput,
   TouchableHighlight,
   useColorScheme,
-  ToastAndroid,
+  ToastAndroid,Alert
 } from 'react-native';
 import {StatusBarComp} from '../@components/StatusBarComp';
 import styles from '../styles';
@@ -42,6 +42,65 @@ export default function LoginScreen({navigation}) {
   const [password, setPassword] = React.useState('');
   const [userNameIsValid, setUserNameValidation] = React.useState(false);
   const [passwordIsValid, setPasswordValidation] = React.useState(false);
+
+  const sendAjax = () => {
+    fetch('http://192.168.3.23:8085/login', {
+      method: 'POST',
+      mode: 'cros',
+      //same-origin - 同源请求，跨域会报error
+      //no-cors - 默认，可以请求其它域的资源，不能访问response内的属性
+      //cros - 允许跨域，可以获取第三方数据，必要条件是访问的服务允许跨域访问
+      //navigate - 支持导航的模式。该navigate值仅用于HTML导航。导航请求仅在文档之间导航时创建。
+      body: `username=${userName}&password=${password}`, // 上传到后端的数据
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        // 'Content-Type': 'multipart/form-data;charset=utf-8', //非文本内容
+        // 'Content-Type': 'multipart/form-data;boundary=------FormBoundary15e896376d1'
+      },
+    })
+      .then(res => {
+        if (res.ok) {
+          //数据解析方式
+          res
+            //.arrayBuffer() // ArrayBuffer/ArrayBufferView
+            // .json() // Json file, need JSON.stringify(...)
+            .text()        // String
+            //.blob()        // Blob/File
+            //.formData()    // FormData
+            .then(responseData => {
+              //从后端返回的数据(res.end())
+
+              switch (responseData) {
+                case '-1':
+                  Alert.alert('登陆失败', "该用户不存在", [
+                    { text: '确定', onPress: () => { } },
+                  ]); break;
+                
+                case '0':
+                  Alert.alert('登陆失败', "密码错误", [
+                    { text: '确定', onPress: () => { } },
+                  ]); break;
+                case '1':
+                  Alert.alert('登陆成功',`欢迎您: ${userName}`, [
+                    { text: '确定', onPress: () => { navigation.navigate('Main')} },
+                  ]); break;
+              }
+            });
+        } else {
+          Alert.alert('请求失败', 'error', [
+            {text: '确定', onPress: () => console.log('OK Pressed!')},
+          ]);
+        }
+      })
+      .catch(err => {
+        console.log('err', err);
+        Alert.alert('请求失败', err, [
+          {text: '确定', onPress: () => console.log('OK Pressed!')},
+        ]);
+        reject(err);
+      });
+  };
 
   return (
     <View
@@ -120,7 +179,7 @@ export default function LoginScreen({navigation}) {
         </View>
 
         <TouchableHighlight
-          onPress={() => navigation.navigate('Home')}
+          onPress={() => sendAjax()}
           disabled={!(userNameIsValid && passwordIsValid)}
           style={
             userNameIsValid && passwordIsValid

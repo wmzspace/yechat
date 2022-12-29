@@ -146,6 +146,41 @@ app.post('/signup', function (req, res) {
 
 });
 
+app.post('/login', function (req, res) {
+
+  var sql = 'SELECT * FROM users';
+
+  //查
+  connection.query(sql, function (err, result) {
+    if (err) {
+      console.log('[SELECT ERROR] - ', err.message);
+      return;
+    }
+
+    // console.log('--------------------------SELECT----------------------------');
+    // console.log(result, result.constructor.name);
+    // console.log('------------------------------------------------------------');
+
+    for (let _user of result) {
+      // console.log("Test:", _user.username);
+      // console.log(req.body.username, req.body.password)
+      if (_user.username == req.body.username) {
+        if (_user.password == req.body.password) {
+          console.log('登录成功!',_user.username);
+          res.end('1');
+        } else {
+          res.end('0');
+        }
+        // res.status(404).send('404')
+        return;
+      }
+
+    }
+    res.end('-1')
+    return;
+  })
+});
+
 app.listen(8085, function () {
   // console.log("应用实例，访问地址为 http://43.143.213.226:8085");
   console.log('应用实例，访问地址为 http://192.168.3.23:8085');
