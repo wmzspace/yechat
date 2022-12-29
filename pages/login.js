@@ -44,7 +44,7 @@ export default function LoginScreen({navigation}) {
   const [passwordIsValid, setPasswordValidation] = React.useState(false);
 
   const sendAjax = () => {
-    fetch('http://192.168.3.23:8085/login', {
+    fetch('http://43.143.213.226:8085/login', {
       method: 'POST',
       mode: 'cros',
       //same-origin - 同源请求，跨域会报error

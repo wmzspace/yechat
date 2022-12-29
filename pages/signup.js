@@ -79,7 +79,7 @@ export default function SignupScreen({navigation}) {
   }
 
   const sendAjax = () => {
-    fetch('http://192.168.3.23:8085/signup', {
+    fetch('http://43.143.213.226:8085/signup', {
       method: 'POST',
       mode: 'cros',
       //same-origin - 同源请求，跨域会报error
