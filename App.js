@@ -7,6 +7,7 @@ import styles from './styles';
 import HomeScreen from './pages/home';
 import SignupScreen from './pages/signup';
 import LoginScreen from './pages/login';
+import TestScreen from './pages/test';
 
 const Stack = createStackNavigator();
 
@@ -18,18 +19,6 @@ export default function App() {
           name="Home"
           component={HomeScreen}
           options={{
-            // title:<>易聊 <Icon name="message1" size={25} color="skyblue"/></>,
-            // headerStyle: {
-            //   backgroundColor: 'black',
-            // },
-            // headerTintColor: '#ffffff',
-            // headerTitleStyle: {
-            //   fontSize: 25,
-            //   lineHeight: 30,
-            //   borderColor: 'black',
-            //   padding: 10,
-            // },
-
             headerShown: false,
           }}
         />
@@ -63,6 +52,7 @@ export default function App() {
             headerTintColor: useColorScheme() === 'dark' ? '#ffffff' : 'black',
           }}
         />
+        <Stack.Screen name='Test' component={TestScreen}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -3,7 +3,6 @@ let deviceHeight =
   Dimensions.get('window').height / Dimensions.get('window').width > 1.8
     ? Dimensions.get('window').height + NativeModules.StatusBarManager.HEIGHT
     : Dimensions.get('window').height;
-console.log(deviceHeight);
 
 const styles = StyleSheet.create({
   container: {
