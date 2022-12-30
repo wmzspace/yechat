@@ -19,13 +19,23 @@ app.all('*', function (req, res, next) {
   next();
 });
 
+const release_version = 'demo_1.0';
+app.post('/checkUpdate', function (req, res) {
+  if (req.body.version != release_version) {
+    res.end('2022-12-30 更新:\n增加了定位系统');
+    return;
+  }
+  res.end('1');
+  return;
+});
+
 //json数据
 
 const mysqlInfo = {
   host: '124.222.251.11',
   port: '26761',
   username: 'wmzspace',
-  password: '', //empty for window
+  password: 'Wmzspace123', //empty for window
   database: 'yechat',
 };
 
@@ -60,7 +70,6 @@ connection.query(sql, function (err, result) {
   console.log('--------------------------SELECT----------------------------');
   console.log(result);
   console.log('------------------------------------------------------------');
-
 });
 
 // const userInfo = {
@@ -87,8 +96,6 @@ connection.query(sql, function (err, result) {
 // });
 
 // connection.end();
-
-
 
 app.post('/signup', function (req, res) {
   console.log('posting............');
@@ -128,7 +135,7 @@ app.post('/signup', function (req, res) {
       req.body.age,
       req.body.address,
       req.body.longitude,
-      req.body.latitude
+      req.body.latitude,
     ];
 
     connection.query(addSql, addSqlParams, function (err, result) {
@@ -145,13 +152,11 @@ app.post('/signup', function (req, res) {
         '-----------------------------------------------------------------\n\n',
       );
     });
-    res.end("注册成功!\n"+JSON.stringify(req.body));
+    res.end('注册成功!\n' + JSON.stringify(req.body));
   });
-
 });
 
 app.post('/login', function (req, res) {
-
   var sql = 'SELECT * FROM users';
 
   //查
@@ -170,7 +175,7 @@ app.post('/login', function (req, res) {
       // console.log(req.body.username, req.body.password)
       if (_user.username == req.body.username) {
         if (_user.password == req.body.password) {
-          console.log('登录成功!',_user.username);
+          console.log('登录成功!', _user.username);
           res.end('1');
         } else {
           res.end('0');
@@ -178,13 +183,12 @@ app.post('/login', function (req, res) {
         // res.status(404).send('404')
         return;
       }
-
     }
-    res.end('-1')
+    res.end('-1');
     return;
-  })
+  });
 });
 
 app.listen(8085, function () {
-  console.log("应用实例，访问地址为 http://43.143.213.226:8085");
+  console.log('应用实例，访问地址为 http://43.143.213.226:8085');
 });
