@@ -139,14 +139,14 @@ export default function MainScreen({route, navigation}) {
   };
 
   refreshData();
-  if (route.params.needRefresh) {
+  // if (route.params.needRefresh) {
     
-    refreshData();
-    navigation.navigate('Main', {
-      userName: route.params.userName,
-      needRefresh:false
-    });
-  }
+  //   refreshData();
+  //   navigation.navigate('Main', {
+  //     userName: route.params.userName,
+  //     needRefresh:false
+  //   });
+  // }
 return (
     <View
       style={[
@@ -191,7 +191,7 @@ return (
                 //   time: (new Date()).toLocaleDateString() + ' ' + (new Date()).toLocaleTimeString(),
                 //   message:"!!!\n!\n!!!"
                 // });
-                fetch('http://192.168.3.23:8085/send', {
+                fetch('http://43.143.213.226:8085/send', {
                   method: 'POST',
                   mode: 'cors', //之前是no-cors
                   body: `author=${route.params.userName}&message=${message}&sender=${route.params.userName}`, // 上传到后端的数据
@@ -260,8 +260,9 @@ return (
                 opacity: 0.6,
               }}>
               <Text style={{}}>发送</Text>
-            </TouchableOpacity>
+          </TouchableOpacity>
           </View>
+          <Text style={{alignSelf:'center'}}>下拉刷新</Text>
         </View>
 
         <FlatList
