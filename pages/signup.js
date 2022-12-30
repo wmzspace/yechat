@@ -6,12 +6,13 @@ import {
   TextInput,
   TouchableHighlight,
   useColorScheme,
-  Alert,
+  Alert,PermissionsAndroid
 } from 'react-native';
 import {StatusBarComp} from '../@components/StatusBarComp';
 import styles from '../styles';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import RadioGroup from 'react-native-radio-buttons-group';
+import Geolocation from '@react-native-community/geolocation';
 
 const radioButtonsData = [
   {
@@ -78,15 +79,159 @@ export default function SignupScreen({navigation}) {
     }
   }
 
+    const [
+      currentLongitude,
+      setCurrentLongitude
+    ] = React.useState('');
+    const [
+      currentLatitude,
+      setCurrentLatitude
+    ] = React.useState('');
+    const [
+      locationStatus,
+      setLocationStatus
+    ] = React.useState('点击左侧"位置"获取');
+  
+   () => {
+      const requestLocationPermission = async () => {
+        if (Platform.OS === 'ios') {
+          getOneTimeLocation();
+          // subscribeLocationLocation();
+        } else {
+          try {
+            const granted = await PermissionsAndroid.request(
+              PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+              {
+                title: '定位请求',
+                message: 'YeChat需要申请系统的定位权限',
+              },
+            );
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+              //To Check, If Permission is granted
+              getOneTimeLocation();
+              // subscribeLocationLocation();
+            } else {
+              setLocationStatus('权限被拒绝');
+              Alert.alert("定位失败", "用户拒绝定位权限, 请尝试在设置中开启权限");
+            }
+          } catch (err) {
+            console.warn(err);
+          }
+        }
+      };
+      requestLocationPermission();
+      return () => {
+        // Geolocation.clearWatch(watchID);
+      };
+    }
+  
+  const getOneTimeLocation = () => {
+      setLocationStatus('定位获取中 ...');
+      Geolocation.getCurrentPosition(
+        //Will give you the current location
+        (position) => {
+          
+          //getting the Longitude from the location json
+          const currentLongitude = 
+          JSON.stringify(position.coords.longitude);
+          
+          //getting the Latitude from the location json
+          const currentLatitude = 
+            JSON.stringify(position.coords.latitude);
+          
+          setLocationStatus('点击左侧"位置"获取');
+  
+          //Setting Longitude state
+          setCurrentLongitude(currentLongitude);
+          
+          //Setting Longitude state
+          setCurrentLatitude(currentLatitude);
+        },
+        (error) => {
+          if (error.message == "No location provider available.") {
+            setLocationStatus('点击左侧"位置"刷新)');
+            Alert.alert("定位失败", `请检查GPS是否开启`);
+          }
+          else if (error.message == "Location permission was not granted.") {
+            setLocationStatus('点击左侧"位置"刷新)');
+            Alert.alert("定位失败", "用户拒绝定位权限, 请尝试在设置中开启权限");
+          }
+          else {
+            setLocationStatus(error.message);
+            Alert.alert("定位失败", error.message);
+          }
+
+        },
+        {
+          enableHighAccuracy: false,
+          timeout: 30000,
+          maximumAge: 1000
+        },
+      );
+    };
+  
+    const subscribeLocationLocation = () => {
+      watchID = Geolocation.watchPosition(
+        (position) => {
+          //Will give you the location on location change
+          
+          setLocationStatus('You are Here');
+          console.log(position);
+  
+          //getting the Longitude from the location json        
+          const currentLongitude =
+            JSON.stringify(position.coords.longitude);
+  
+          //getting the Latitude from the location json
+          const currentLatitude = 
+            JSON.stringify(position.coords.latitude);
+  
+          //Setting Longitude state
+          setCurrentLongitude(currentLongitude);
+  
+          //Setting Latitude state
+          setCurrentLatitude(currentLatitude);
+        },
+        (error) => {
+          setLocationStatus(error.message);
+          // Alert.alert("定位失败",error.message+"\n请检查是否打开GPS");
+        },
+        {
+          enableHighAccuracy: false,
+          maximumAge: 1000
+        },
+      );
+    };
+
+ 
+  
+  // Geolocation.getCurrentPosition(
+  //   //Will give you the current location
+  //   (position) => {
+  //     //getting the Longitude from the location json
+  //     const currentLongitude =
+  //       JSON.stringify(position.coords.longitude);
+  
+  //     //getting the Latitude from the location json
+  //     const currentLatitude =
+  //       JSON.stringify(position.coords.latitude);
+        
+  //    }, (error) => alert(error.message), {
+  //      enableHighAccuracy: true, timeout: 20000, maximumAge: 1000
+  //    }
+  // );
+
+  
   const sendAjax = () => {
-    fetch('http://43.143.213.226:8085/signup', {//不能直接使用 wmzspace.space域名, 因为 域名开启了https防窜站
+    fetch('http://43.143.213.226:8085/signup', {
+      //不能直接使用 wmzspace.space域名, 因为 域名开启了https防窜站
       method: 'POST',
       mode: 'cros',
       //same-origin - 同源请求，跨域会报error
       //no-cors - 默认，可以请求其它域的资源，不能访问response内的属性
       //cros - 允许跨域，可以获取第三方数据，必要条件是访问的服务允许跨域访问
       //navigate - 支持导航的模式。该navigate值仅用于HTML导航。导航请求仅在文档之间导航时创建。
-      body: `username=${userInfo.userName}&password=${userInfo.password}&gender=${gender}&age=${age}&address=${address}`, // 上传到后端的数据
+      body: `username=${userInfo.userName}&password=${userInfo.password}&gender=${gender}&age=${age}&address=${address}&longitude=${currentLongitude}&latitude=${currentLatitude}`, // 上传到后端的数据
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -100,16 +245,21 @@ export default function SignupScreen({navigation}) {
           res
             //.arrayBuffer() // ArrayBuffer/ArrayBufferView
             // .json() // Json file, need JSON.stringify(...)
-            .text()        // String
+            .text() // String
             //.blob()        // Blob/File
             //.formData()    // FormData
             .then(responseData => {
               //从后端返回的数据(res.end())
-              Alert.alert('提示',responseData, [
-                { text: '确定', onPress: () => { console.log('OK Pressed!'); if(responseData.substring(0,4)=="注册成功")
+              Alert.alert('提示', responseData, [
                 {
-                  navigation.navigate('Home');
-              }} },
+                  text: '确定',
+                  onPress: () => {
+                    console.log('OK Pressed!');
+                    if (responseData.substring(0, 4) == '注册成功') {
+                      navigation.navigate('Home');
+                    }
+                  },
+                },
               ]);
             });
         } else {
@@ -192,12 +342,15 @@ export default function SignupScreen({navigation}) {
               }}
             />
           </View>
-          
+
           <View style={style.inputWrap}>
-            <Text>家乡: </Text>
+            <Text onPress={
+              getOneTimeLocation
+            }>位置: </Text>
             <TextInput
               style={style.textInput}
-              placeholder="(选填)"
+              placeholder={locationStatus}
+              defaultValue={currentLongitude?currentLongitude+' '+currentLatitude:''}
               clearButtonMode="always"
               maxLength={100}
               onChangeText={address => {
@@ -211,13 +364,10 @@ export default function SignupScreen({navigation}) {
             <RadioGroup
               radioButtons={radioButtons}
               onPress={onPressRadioButton}
-              containerStyle={{width:40}}
+              containerStyle={{width: 40}}
               layout="row"
-              
             />
           </View>
-
-
 
           <Text
             style={{

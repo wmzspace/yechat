@@ -48,6 +48,21 @@ connection.connect(err => {
   );
 });
 
+var sql = 'SELECT * FROM users';
+
+//查
+connection.query(sql, function (err, result) {
+  if (err) {
+    console.log('[SELECT ERROR] - ', err.message);
+    return;
+  }
+
+  console.log('--------------------------SELECT----------------------------');
+  console.log(result);
+  console.log('------------------------------------------------------------');
+
+});
+
 // const userInfo = {
 //   username: 'test1',
 //   password: 'test1',
@@ -104,7 +119,7 @@ app.post('/signup', function (req, res) {
       }
     }
 
-    const addSql = `INSERT INTO users(id,username,password,gender,age,address,join_time,last_login_time) VALUES(?,?,?,?,?,?,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)`;
+    const addSql = `INSERT INTO users(id,username,password,gender,age,address,join_time,last_login_time,longitude,latitude) VALUES(?,?,?,?,?,?,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,?,?)`;
     const addSqlParams = [
       0,
       req.body.username,
@@ -112,6 +127,8 @@ app.post('/signup', function (req, res) {
       req.body.gender,
       req.body.age,
       req.body.address,
+      req.body.longitude,
+      req.body.latitude
     ];
 
     connection.query(addSql, addSqlParams, function (err, result) {
