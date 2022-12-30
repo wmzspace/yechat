@@ -38,7 +38,7 @@ const mysqlInfo = {
   host: '124.222.251.11',
   port: '26761',
   username: 'wmzspace',
-  password: 'Wmzspace123', //empty for window
+  password: '', //empty for window
   database: 'yechat',
 };
 
