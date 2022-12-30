@@ -12,13 +12,14 @@ import {StatusBarComp} from '../@components/StatusBarComp';
 import * as Animatable from 'react-native-animatable';
 import styles from '../styles';
 
-export default function HomeScreen({navigation}) {
+export default function HomeScreen({ navigation }) {
+  const currentVersion="demo_1.2"
   checkUpdate = () => {
     fetch('http://43.143.213.226:8085/checkUpdate', {
       //不能直接使用 wmzspace.space域名, 因为 域名开启了https防窜站
       method: 'POST',
       mode: 'cros',
-      body: `version=demo_1.1`, // 上传到后端的数据
+      body: `version=${currentVersion}`, // 上传到后端的数据
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -44,7 +45,7 @@ export default function HomeScreen({navigation}) {
                     onPress: () =>{  navigation.navigate('Home');BackHandler.exitApp(); } ,
                   },
                 ]);
-                Linking.openURL('https://wmzspace.space/yechat/yechat.apk');
+                Linking.openURL(`https://wmzspace.space/yechat/yechat_${currentVersion}.apk`);
               }
             });
         } else {

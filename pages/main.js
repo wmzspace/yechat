@@ -101,7 +101,7 @@ export default function MainScreen({route, navigation}) {
   };
 
   const refreshData =() => {
-    fetch('http://192.168.3.23:8085/refresh', {
+    fetch('http://43.143.213.226:8085/refresh', {
       method: 'GET',
     })
       .then(res => {

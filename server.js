@@ -1,4 +1,5 @@
 // ALTER TABLE users AUTO_INCREMENT = 2
+// ALTER TABLE messages AUTO_INCREMENT = 1
 
 var express = require('express');
 //Post方式请求参数放在请求体里面，需引用body-parser解析body
@@ -19,11 +20,11 @@ app.all('*', function (req, res, next) {
   next();
 });
 
-const release_version = 'demo_1.1';
+const release_version = 'demo_1.2';
 app.post('/checkUpdate', function (req, res) {
   if (req.body.version != release_version) {
     res.end(
-      '2022-12-30 更新:\n1.修复了移动网络定位闪退的问题\n2.定位系统已支持具体地址',
+      '2022-12-31 更新:\n1.公屏聊天系统已开放\n2.修复了注册位置提交未为空的情况',
     );
     return;
   }
