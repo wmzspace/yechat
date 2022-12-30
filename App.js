@@ -55,6 +55,9 @@ export default function App() {
           name="Main"
           component={MainScreen}
           options={{
+            
+            // headerShown: false,
+          
             title: 'Yechat',
             headerTitleAlign: 'center',
             headerStyle: [

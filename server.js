@@ -19,10 +19,12 @@ app.all('*', function (req, res, next) {
   next();
 });
 
-const release_version = 'demo_1.0';
+const release_version = 'demo_1.1';
 app.post('/checkUpdate', function (req, res) {
   if (req.body.version != release_version) {
-    res.end('2022-12-30 更新:\n增加了定位系统');
+    res.end(
+      '2022-12-30 更新:\n1.修复了移动网络定位闪退的问题\n2.定位系统已支持具体地址',
+    );
     return;
   }
   res.end('1');
@@ -186,6 +188,67 @@ app.post('/login', function (req, res) {
     }
     res.end('-1');
     return;
+  });
+});
+
+app.post('/send', function (req, res) {
+  console.log(req.body);
+
+  const addSql = `INSERT INTO messages(id,msg,sender) VALUES(0,?,?)`;
+  const addSqlParams = [req.body.message,req.body.sender];
+
+  connection.query(addSql, addSqlParams, function (err, result) {
+    if (err) {
+      console.log('[INSERT ERROR] - ', err.message);
+      return;
+    }
+
+    console.log('--------------------------INSERT----------------------------');
+    console.log('INSERT ID:', result);
+    console.log(
+      '-----------------------------------------------------------------\n\n',
+    );
+  });
+
+  var sql = 'SELECT * FROM messages';
+
+  //查
+  connection.query(sql, function (err, result) {
+    if (err) {
+      console.log('[SELECT ERROR] - ', err.message);
+      return;
+    }
+
+    console.log('--------------------------SELECT----------------------------');
+    for (let msg of result) {
+      console.log(msg);
+    }
+    console.log('------------------------------------------------------------');
+
+    res.end(JSON.stringify(result));
+    return;
+  });
+
+  // res.end('-1')
+});
+
+app.get('/refresh', function (req, res) {
+  var sql = 'SELECT * FROM messages';
+
+  //查
+  connection.query(sql, function (err, result) {
+    if (err) {
+      console.log('[SELECT ERROR] - ', err.message);
+      return;
+    }
+
+    console.log('--------------------------SELECT----------------------------');
+    for (let msg of result) {
+      console.log(msg);
+    }
+    console.log('------------------------------------------------------------');
+
+    res.end(JSON.stringify(result));
   });
 });
 

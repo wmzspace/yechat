@@ -18,7 +18,7 @@ export default function HomeScreen({navigation}) {
       //不能直接使用 wmzspace.space域名, 因为 域名开启了https防窜站
       method: 'POST',
       mode: 'cros',
-      body: `version=demo_1.0`, // 上传到后端的数据
+      body: `version=demo_1.1`, // 上传到后端的数据
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/x-www-form-urlencoded',

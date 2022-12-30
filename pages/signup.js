@@ -6,13 +6,14 @@ import {
   TextInput,
   TouchableHighlight,
   useColorScheme,
-  Alert,PermissionsAndroid
+  Alert,
+  PermissionsAndroid,
 } from 'react-native';
 import {StatusBarComp} from '../@components/StatusBarComp';
 import styles from '../styles';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import RadioGroup from 'react-native-radio-buttons-group';
-import Geolocation from '@react-native-community/geolocation';
+import Geolocation from 'react-native-geolocation-service';
 
 const radioButtonsData = [
   {
@@ -68,8 +69,8 @@ export default function SignupScreen({navigation}) {
   const [userNameIsValid, setUserNameValidation] = React.useState(false);
   const [passwordIsValid, setPasswordValidation] = React.useState(false);
   const userInfo = {userName: userName, password: password};
-
   const [radioButtons, setRadioButtons] = React.useState(radioButtonsData);
+
   function onPressRadioButton(radioButtonsArray) {
     setRadioButtons(radioButtonsArray);
     for (let option of radioButtonsArray) {
@@ -79,159 +80,169 @@ export default function SignupScreen({navigation}) {
     }
   }
 
-    const [
-      currentLongitude,
-      setCurrentLongitude
-    ] = React.useState('');
-    const [
-      currentLatitude,
-      setCurrentLatitude
-    ] = React.useState('');
-    const [
-      locationStatus,
-      setLocationStatus
-    ] = React.useState('点击左侧"位置"获取');
-  
-   () => {
-      const requestLocationPermission = async () => {
-        if (Platform.OS === 'ios') {
+  const [currentLongitude, setCurrentLongitude] = React.useState('');
+  const [currentLatitude, setCurrentLatitude] = React.useState('');
+  const [locationStatus, setLocationStatus] =
+    React.useState('点击左侧"位置"获取');
+  //  () => {
+  const requestLocationPermission = async () => {
+    if (Platform.OS === 'ios') {
+      getOneTimeLocation();
+
+      // subscribeLocationLocation();
+    } else {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          {
+            title: '定位请求',
+            message: 'YeChat需要申请系统的定位权限',
+          },
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          //To Check, If Permission is granted
           getOneTimeLocation();
+
           // subscribeLocationLocation();
         } else {
-          try {
-            const granted = await PermissionsAndroid.request(
-              PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-              {
-                title: '定位请求',
-                message: 'YeChat需要申请系统的定位权限',
-              },
-            );
-            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-              //To Check, If Permission is granted
-              getOneTimeLocation();
-              // subscribeLocationLocation();
-            } else {
-              setLocationStatus('权限被拒绝');
-              Alert.alert("定位失败", "用户拒绝定位权限, 请尝试在设置中开启权限");
-            }
-          } catch (err) {
-            console.warn(err);
-          }
+          setLocationStatus('权限被拒绝');
+          Alert.alert('定位失败', '用户拒绝定位权限, 请尝试在设置中开启权限');
         }
-      };
-      requestLocationPermission();
-      return () => {
-        // Geolocation.clearWatch(watchID);
-      };
+      } catch (err) {
+        console.warn('catch: ' + err);
+      }
     }
-  
+  };
+
   const getOneTimeLocation = () => {
-      setLocationStatus('定位获取中 ...');
-      Geolocation.getCurrentPosition(
-        //Will give you the current location
-        (position) => {
-          
-          //getting the Longitude from the location json
-          const currentLongitude = 
-          JSON.stringify(position.coords.longitude);
-          
-          //getting the Latitude from the location json
-          const currentLatitude = 
-            JSON.stringify(position.coords.latitude);
-          
-          setLocationStatus('点击左侧"位置"获取');
-  
-          //Setting Longitude state
-          setCurrentLongitude(currentLongitude);
-          
-          //Setting Longitude state
-          setCurrentLatitude(currentLatitude);
-        },
-        (error) => {
-          if (error.message == "No location provider available.") {
-            setLocationStatus('点击左侧"位置"刷新)');
-            Alert.alert("定位失败", `请检查GPS是否开启`);
-          }
-          else if (error.message == "Location permission was not granted.") {
-            setLocationStatus('点击左侧"位置"刷新)');
-            Alert.alert("定位失败", "用户拒绝定位权限, 请尝试在设置中开启权限");
-          }
-          else {
-            setLocationStatus(error.message);
-            Alert.alert("定位失败", error.message);
-          }
+    setLocationStatus('定位获取中 ...');
+    Geolocation.getCurrentPosition(
+      //Will give you the current location
+      position => {
+        //getting the Longitude from the location json
+        const currentLongitude = JSON.stringify(position.coords.longitude);
 
-        },
-        {
-          enableHighAccuracy: false,
-          timeout: 30000,
-          maximumAge: 1000
-        },
-      );
-    };
-  
-    const subscribeLocationLocation = () => {
-      watchID = Geolocation.watchPosition(
-        (position) => {
-          //Will give you the location on location change
-          
-          setLocationStatus('You are Here');
-          console.log(position);
-  
-          //getting the Longitude from the location json        
-          const currentLongitude =
-            JSON.stringify(position.coords.longitude);
-  
-          //getting the Latitude from the location json
-          const currentLatitude = 
-            JSON.stringify(position.coords.latitude);
-  
-          //Setting Longitude state
-          setCurrentLongitude(currentLongitude);
-  
-          //Setting Latitude state
-          setCurrentLatitude(currentLatitude);
-        },
-        (error) => {
+        //getting the Latitude from the location json
+        const currentLatitude = JSON.stringify(position.coords.latitude);
+
+        setLocationStatus('点击左侧"位置"获取');
+
+        //Setting Longitude state
+        setCurrentLongitude(currentLongitude);
+
+        //Setting Longitude state
+        setCurrentLatitude(currentLatitude);
+        // console.log(`${currentLongitude},${currentLatitude}`)
+        geocoder(currentLongitude, currentLatitude);
+      },
+      error => {
+        if (error.message == 'No location provider available.') {
+          setLocationStatus('点击左侧"位置"刷新)');
+          Alert.alert('定位失败', `请检查GPS是否开启`);
+        } else if (error.message == 'Location permission was not granted.') {
+          setLocationStatus('点击左侧"位置"刷新)');
+          Alert.alert('定位失败', '用户拒绝定位权限, 请尝试在设置中开启权限');
+        } else {
           setLocationStatus(error.message);
-          // Alert.alert("定位失败",error.message+"\n请检查是否打开GPS");
-        },
-        {
-          enableHighAccuracy: false,
-          maximumAge: 1000
-        },
-      );
-    };
+          Alert.alert('定位失败', error.message);
+        }
+        return 0;
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 30000,
+        maximumAge: 1000,
+      },
+    );
+  };
 
- 
-  
-  // Geolocation.getCurrentPosition(
-  //   //Will give you the current location
-  //   (position) => {
-  //     //getting the Longitude from the location json
-  //     const currentLongitude =
-  //       JSON.stringify(position.coords.longitude);
-  
-  //     //getting the Latitude from the location json
-  //     const currentLatitude =
-  //       JSON.stringify(position.coords.latitude);
-        
-  //    }, (error) => alert(error.message), {
-  //      enableHighAccuracy: true, timeout: 20000, maximumAge: 1000
-  //    }
-  // );
+  const subscribeLocationLocation = () => {
+    watchID = Geolocation.watchPosition(
+      position => {
+        //Will give you the location on location change
 
-  
+        setLocationStatus('You are Here');
+        console.log(position);
+
+        //getting the Longitude from the location json
+        const currentLongitude = JSON.stringify(position.coords.longitude);
+
+        //getting the Latitude from the location json
+        const currentLatitude = JSON.stringify(position.coords.latitude);
+
+        //Setting Longitude state
+        setCurrentLongitude(currentLongitude);
+
+        //Setting Latitude state
+        setCurrentLatitude(currentLatitude);
+      },
+      error => {
+        setLocationStatus(error.message);
+        // Alert.alert("定位失败",error.message+"\n请检查是否打开GPS");
+      },
+      {
+        enableHighAccuracy: false,
+        maximumAge: 1000,
+      },
+    );
+  };
+
+  const [formatted_address, setFormattedAddress] = React.useState('');
+  const [province, setProvince] = React.useState('');
+  const [city, setCity] = React.useState('');
+  const [district, setDistrict] = React.useState('');
+  const geocoder = (currentLongitude, currentLatitude) => {
+    fetch(
+      `https://restapi.amap.com/v3/geocode/regeo?output=json&location=${currentLongitude},${currentLatitude}&key=85f6fcd6b806ec2b69e4711119d949ed&radius=1000&extensions=all`,
+      {
+        method: 'GET',
+      },
+    )
+      .then(res => {
+        if (res.ok) {
+          res.json().then(responseData => {
+            console.log(responseData['regeocode']['formatted_address']);
+            console.log(
+              responseData['regeocode']['addressComponent']['province'],
+            );
+            console.log(responseData['regeocode']['addressComponent']['city']);
+            console.log(
+              responseData['regeocode']['addressComponent']['district'],
+            );
+            setFormattedAddress(responseData['regeocode']['formatted_address']);
+            setProvince(
+              responseData['regeocode']['addressComponent']['province'],
+            );
+            setCity(responseData['regeocode']['addressComponent']['city']);
+            setDistrict(
+              responseData['regeocode']['addressComponent']['district'],
+            );
+            setAddress(responseData['regeocode']['addressComponent']['province'] + ' ' + responseData['regeocode']['addressComponent']['city'] + ' ' + responseData['regeocode']['addressComponent']['district'])
+          });
+        } else {
+          Alert.alert('请求失败', 'error', [
+            {text: '确定', onPress: () => console.log('OK Pressed!')},
+          ]);
+        }
+      })
+      .catch(err => {
+        console.log('err', err);
+        Alert.alert('请求失败', err, [
+          {text: '确定', onPress: () => console.log('OK Pressed!')},
+        ]);
+      });
+  };
+
   const sendAjax = () => {
     fetch('http://43.143.213.226:8085/signup', {
       //不能直接使用 wmzspace.space域名, 因为 域名开启了https防窜站
       method: 'POST',
-      mode: 'cros',
+      mode: 'cors', //之前是no-cors
       //same-origin - 同源请求，跨域会报error
       //no-cors - 默认，可以请求其它域的资源，不能访问response内的属性
       //cros - 允许跨域，可以获取第三方数据，必要条件是访问的服务允许跨域访问
       //navigate - 支持导航的模式。该navigate值仅用于HTML导航。导航请求仅在文档之间导航时创建。
-      body: `username=${userInfo.userName}&password=${userInfo.password}&gender=${gender}&age=${age}&address=${address}&longitude=${currentLongitude}&latitude=${currentLatitude}`, // 上传到后端的数据
+      body: `username=${userInfo.userName}&password=${userInfo.password}&gender=${gender}&age=${age}&address=${address}&province=${province}&city=${city}&district=${district}&longitude=${currentLongitude}&latitude=${currentLatitude}`, // 上传到后端的数据
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -273,7 +284,6 @@ export default function SignupScreen({navigation}) {
         Alert.alert('请求失败', err, [
           {text: '确定', onPress: () => console.log('OK Pressed!')},
         ]);
-        reject(err);
       });
   };
 
@@ -344,17 +354,17 @@ export default function SignupScreen({navigation}) {
           </View>
 
           <View style={style.inputWrap}>
-            <Text onPress={
-              getOneTimeLocation
-            }>位置: </Text>
+            <Text onPress={requestLocationPermission}>位置: </Text>
             <TextInput
               style={style.textInput}
               placeholder={locationStatus}
-              defaultValue={currentLongitude?currentLongitude+' '+currentLatitude:''}
+              value={
+                province ? province + ' ' + city + ' ' + district : ''
+              }
               clearButtonMode="always"
               maxLength={100}
-              onChangeText={address => {
-                setAddress(address);
+              onChangeText={_address => {
+                setAddress(_address);
               }}
             />
           </View>

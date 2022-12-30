@@ -6,7 +6,8 @@ import {
   TextInput,
   TouchableHighlight,
   useColorScheme,
-  ToastAndroid,Alert
+  ToastAndroid,
+  Alert,
 } from 'react-native';
 import {StatusBarComp} from '../@components/StatusBarComp';
 import styles from '../styles';
@@ -65,7 +66,7 @@ export default function LoginScreen({navigation}) {
           res
             //.arrayBuffer() // ArrayBuffer/ArrayBufferView
             // .json() // Json file, need JSON.stringify(...)
-            .text()        // String
+            .text() // String
             //.blob()        // Blob/File
             //.formData()    // FormData
             .then(responseData => {
@@ -73,18 +74,29 @@ export default function LoginScreen({navigation}) {
 
               switch (responseData) {
                 case '-1':
-                  Alert.alert('登陆失败', "该用户不存在", [
-                    { text: '确定', onPress: () => { } },
-                  ]); break;
-                
+                  Alert.alert('登陆失败', '该用户不存在', [
+                    {text: '确定', onPress: () => {}},
+                  ]);
+                  break;
+
                 case '0':
-                  Alert.alert('登陆失败', "密码错误", [
-                    { text: '确定', onPress: () => { } },
-                  ]); break;
+                  Alert.alert('登陆失败', '密码错误', [
+                    {text: '确定', onPress: () => {}},
+                  ]);
+                  break;
                 case '1':
-                  Alert.alert('登陆成功',`欢迎您: ${userName}`, [
-                    { text: '确定', onPress: () => { navigation.navigate('Main')} },
-                  ]); break;
+                  Alert.alert('登陆成功', `欢迎您: ${userName}`, [
+                    {
+                      text: '确定',
+                      onPress: () => {
+                        navigation.navigate('Main', {
+                          userName: userName,
+                          needRefresh:true
+                        });
+                      },
+                    },
+                  ]);
+                  break;
               }
             });
         } else {
