@@ -51,19 +51,21 @@ export default function App() {
             headerTintColor: useColorScheme() === 'dark' ? '#ffffff' : 'black',
           }}
         />
-        <Stack.Screen name="Main" component={MainScreen}
-            options={{
-              title: 'Yechat',
-              headerTitleAlign: 'center',
-              headerStyle: [
-                useColorScheme() === 'dark'
-                  ? styles.darkBackgroundColor
-                  : styles.lightBackgroundColor,
-                {borderWidth: 0},
-              ],
-              headerTitleStyle: {borderColor: 'white', borderWidth: 0},
-              headerTintColor: useColorScheme() === 'dark' ? '#ffffff' : 'black',
-            }}
+        <Stack.Screen
+          name="Main"
+          component={MainScreen}
+          options={{
+            title: 'Yechat',
+            headerTitleAlign: 'center',
+            headerStyle: [
+              useColorScheme() === 'dark'
+                ? styles.darkBackgroundColor
+                : styles.lightBackgroundColor,
+              {borderWidth: 0},
+            ],
+            headerTitleStyle: {borderColor: 'white', borderWidth: 0},
+            headerTintColor: useColorScheme() === 'dark' ? '#ffffff' : 'black',
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>

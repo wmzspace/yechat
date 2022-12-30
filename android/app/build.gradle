@@ -75,11 +75,13 @@ import org.apache.tools.ant.taskdefs.condition.Os
  *
  *   // supply additional arguments to the packager
  *   extraPackagerArgs: []
+ *
  * ]
  */
 
 project.ext.react = [
     enableHermes: true,  // clean and rebuild if changing
+//    extraPackagerArgs: ["--sourcemap-output", "$buildDir/intermediates/sourcemaps/react/release/index.android.bundle.packager.map"]
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
