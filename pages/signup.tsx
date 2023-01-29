@@ -193,7 +193,7 @@ export default function SignupScreen({navigation}) {
   const [district, setDistrict] = React.useState('');
   const geocoder = (currentLongitude, currentLatitude) => {
     fetch(
-      `https://restapi.amap.com/v3/geocode/regeo?output=json&location=${currentLongitude},${currentLatitude}&key=85f6fcd6b806ec2b69e4711119d949ed&radius=1000&extensions=all`,
+      `https://restapi.amap.com/v3/geocode/regeo?output=json&location=${currentLongitude},${currentLatitude}&key=6db2f5900df5e3f3be3c2ef4cfb39f2a&radius=1000&extensions=all`,
       {
         method: 'GET',
       },
