@@ -35,10 +35,10 @@ app.post('/checkUpdate', function (req, res) {
 //json数据
 
 const mysqlInfo = {
-  host: '124.222.251.11',
-  port: '26761',
-  username: 'wmzspace',
-  password: '', //empty for window
+  host: 'wmzspace.space',
+  port: '3306',
+  username: 'yechat',
+  password: 'yechat', //empty for window
   database: 'yechat',
 };
 
